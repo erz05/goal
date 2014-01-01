@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pauseLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#444444"
+    android:padding="24dp"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+<Button android:id="@+id/quitYes"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="yes"
+    android:padding="12dp"/>
+
+<Button android:id="@+id/quitNo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="No"
+    android:padding="24dp"/>
+
+</LinearLayout>
