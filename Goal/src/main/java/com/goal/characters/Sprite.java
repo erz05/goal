@@ -75,23 +75,27 @@ public class Sprite {
         y += speedY;
 
         if(x<50){
-            speedX = -speedX;
-            x = 50;
+            reset();
+            //speedX = -speedX;
+            //x = 50;
         }
 
         if(x>canvasW-50){
-            speedX = -speedX;
-            x = canvasW-50;
+            reset();
+            //speedX = -speedX;
+            //x = canvasW-50;
         }
 
         if(y<50){
-            speedY = -speedY;
-            y = 50;
+            reset();
+            //speedY = -speedY;
+            //y = 50;
         }
 
         if(y>canvasH-50){
-            speedY = -speedY;
-            y = canvasH-50;
+            reset();
+            //speedY = -speedY;
+            //y = canvasH-50;
         }
 
         /*currentFrame = ++currentFrame % BMP_COLUMNS;
@@ -162,5 +166,12 @@ public class Sprite {
                 speedX = -speedX;
                 break;
         }
+    }
+
+    public void reset(){
+        x = 50;
+        y = 50;
+        speedX = 15;
+        speedY = 15;
     }
 }

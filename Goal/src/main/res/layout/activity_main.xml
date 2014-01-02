@@ -9,14 +9,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <TextView android:id="@+id/score"
-        android:layout_width="wrap_content"
+    <LinearLayout android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:text="Score: 0"
-        android:textSize="32sp"
-        android:textColor="@android:color/white"
-        android:layout_centerHorizontal="true"
-        android:padding="24dp"/>
+        android:layout_width="match_parent">
+
+        <TextView android:id="@+id/score"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Score: 0"
+            android:textSize="32sp"
+            android:textColor="@android:color/white"
+            android:padding="24dp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <ImageView android:id="@+id/replayLevel"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/replay"
+            android:layout_gravity="right"
+            android:padding="10dp"/>
+
+        <ImageView android:id="@+id/playLevel"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/play"
+            android:layout_gravity="right"
+            android:padding="10dp"/>
+
+    </LinearLayout>
 
     <FrameLayout android:id="@+id/menuLayout"
         android:orientation="vertical"

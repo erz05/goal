@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -116,6 +118,24 @@ public class MainActivity extends Activity implements GameListener, MenuListener
             //gameLayout.addView(background);
             game.start();
             paused = false;
+
+            ImageView playLevel = (ImageView) findViewById(R.id.playLevel);
+            ImageView replayLevel = (ImageView) findViewById(R.id.replayLevel);
+
+            playLevel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    game.shootBall();
+                }
+            });
+
+            replayLevel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    game.resetLevel();
+                }
+            });
+
             FrameLayout menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
             menuLayout.removeView(map);
             map = null;

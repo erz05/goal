@@ -33,13 +33,11 @@ public class Game extends SurfaceView{
 
     private GameListener listener;
 
-    private boolean create = false;
+    private boolean modifyPlayers = false;
+    private boolean ballInPlay = false;
 
     public Game(Context context) {
         super(context);
-        //setBackgroundColor(Color.TRANSPARENT);
-        //setZOrderOnTop(true);
-        //getHolder().setFormat(PixelFormat.TRANSPARENT);
         gameLoopThread = new GameLoopThread(this);
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
@@ -62,7 +60,6 @@ public class Game extends SurfaceView{
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 ball = createSprite(R.drawable.running);
-                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.monstars);
             }
 
             @Override
@@ -122,11 +119,18 @@ public class Game extends SurfaceView{
             canvas.drawCircle(width,height, sixteenth, fieldPaint);
             canvas.drawCircle(0,height, sixteenth, fieldPaint);
 
-            if(ball != null){
+            if(ballInPlay && ball != null){
                 ball.onDraw(canvas);
                 //player.onDraw(canvas);
 
-                create = false;
+                if(ball.getRect().intersect(goal)){
+                    listener.setScore(10);
+                    ball.reset();
+                }
+            }
+
+            if(ball != null){
+                modifyPlayers = false;
 
                 if(players.size() > 0){
                     for(Player player: players){
@@ -137,13 +141,8 @@ public class Game extends SurfaceView{
                     }
                 }
 
-                create = true;
-
-                if(ball.getRect().intersect(goal)){
-                    listener.setScore(10);
-                }
+                modifyPlayers = true;
             }
-
             /*if(player.checkCollision(ball.getRect())){
                 //Log.v("DELETE_THIS", "Collision");
             }*/
@@ -195,7 +194,7 @@ public class Game extends SurfaceView{
     }
 
     public void createPlayer(int x, int y){
-        if(create){
+        if(modifyPlayers){
             Player player = new Player(x, y);
             players.add(player);
         }
@@ -203,5 +202,16 @@ public class Game extends SurfaceView{
 
     public void setListener(GameListener listener){
         this.listener = listener;
+    }
+
+    public void resetLevel(){
+        ballInPlay = false;
+        ball.reset();
+        if(modifyPlayers)
+            players.clear();
+    }
+
+    public void shootBall(){
+        ballInPlay = true;
     }
 }
