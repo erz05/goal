@@ -10,6 +10,7 @@ import android.graphics.Rect;
 public class Player {
     private int x;
     private int y;
+    private int radius = 50;
 
     public Player(int x, int y) {
         this.x = x;
@@ -22,7 +23,7 @@ public class Player {
 
     public void onDraw(Canvas canvas, Paint paint) {
         update();
-        canvas.drawCircle(x, y, 50, paint);
+        canvas.drawCircle(x, y, radius, paint);
     }
 
     public boolean checkCollision(Rect r){
@@ -39,5 +40,13 @@ public class Player {
 
     public int getY(){
         return y;
+    }
+
+    public int getRadius(){
+        return radius;
+    }
+
+    public int getMass(){
+        return radius * radius;
     }
 }

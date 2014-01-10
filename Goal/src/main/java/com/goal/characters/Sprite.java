@@ -29,7 +29,7 @@ public class Sprite {
 
     private Random random;
 
-    private int speedX, speedY;
+    private int speedX, speedY, radius = 50;
 
     //constant variables
     private double gravity = 9.8;
@@ -116,7 +116,7 @@ public class Sprite {
 
     public void onDraw(Canvas canvas) {
         update();
-        canvas.drawCircle(x,y,50,paint);
+        canvas.drawCircle(x,y,radius,paint);
         //int srcX = currentFrame * width;
         //int srcY = row * height;
         //src.set(srcX, srcY, srcX + width, srcY + height);
@@ -146,6 +146,18 @@ public class Sprite {
         return y;
     }
 
+    public int getSpeedX(){
+        return speedX;
+    }
+
+    public int getSpeedY(){
+        return speedY;
+    }
+
+    public int getRadius(){
+        return radius;
+    }
+
     public void switchSpeed(){
         int s = random.nextInt(2);
         switch (s){
@@ -173,5 +185,21 @@ public class Sprite {
         y = 50;
         speedX = 15;
         speedY = 15;
+    }
+
+    public double getDegrees(){
+        return Math.toDegrees(Math.atan(y/x));
+    }
+
+    public void setSpeedX(int speedX){
+        this.speedX = speedX;
+    }
+
+    public void setSpeedY(int speedY){
+        this.speedY = speedY;
+    }
+
+    public int getMass(){
+        return radius * radius;
     }
 }

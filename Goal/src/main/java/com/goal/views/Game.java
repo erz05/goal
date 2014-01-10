@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -153,9 +154,22 @@ public class Game extends SurfaceView{
                 if(players.size() > 0){
                     for(Player player: players){
                         player.onDraw(canvas, playerPaint);
-                        if(player.getRect().intersect(ball.getRect())){
-                            ball.switchSpeed();
+
+                        double xDif = ball.getX() - player.getX();
+                        double yDif = ball.getY() - player.getY();
+
+                        double distanceSquared = xDif * xDif + yDif * yDif;
+                        boolean collision = distanceSquared < (ball.getRadius() + player.getRadius()) * (ball.getRadius() + player.getRadius());
+
+                        if(collision){
+                            //ball.switchSpeed();
+                            ball_collision(player);
                         }
+
+
+                        /*if(player.getRect().intersect(ball.getRect())){
+                            ball.switchSpeed();
+                        }*/
                     }
                 }
 
@@ -231,5 +245,37 @@ public class Game extends SurfaceView{
 
     public void shootBall(){
         ballInPlay = true;
+    }
+
+    void ball_collision(Player ball2)
+    {
+        double eta = 1.0; // coefficient of restitution
+        // relative position
+        double px = ball2.getX() - ball.getX();
+        double py = ball2.getY() - ball.getY();
+        // unit vector along line of centers
+        double vnorm = Math.hypot(px,py);
+        px = px/vnorm;
+        py = py/vnorm;
+        double m1 = 1;//ball.getMass();
+        double m2 = 1;//ball2.getMass();
+        double mt = m1+m2;
+        // velocity components (normal)
+        double v1 = ball.getSpeedX()*px+ball.getSpeedY()*py;
+        double v2 = -ball.getSpeedX()*px+(-ball.getSpeedY())*py;
+        // velocity components (transverse)
+        double qx = py;
+        double qy = -px;
+        double u1 = ball.getSpeedX()*qx+ball.getSpeedY()*qy;
+        //double u2 = ball2.vx*qx+ball2.vy*qy;
+        // calculate changed velocity
+        double v1f = ((eta+1.0)*m2*v2+v1*(m1-eta*m2))/mt;
+        //double v2f = ((eta+1.0)*m1*v1+v2*(m2-eta*m1))/mt;
+        // back to original coordinates.
+        Log.v("DELETE_THIS", "caca = "+v1f+", "+px+", "+u1+", "+qx);
+        ball.setSpeedX((int)(v1f*px+u1*qx));
+        ball.setSpeedY((int)(v1f*py+u1*qy));
+        //ball2.vx = v2f*px+u2*qx;
+        //ball2.vy = v2f*py+u2*qy;
     }
 }
