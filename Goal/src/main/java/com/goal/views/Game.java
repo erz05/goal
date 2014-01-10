@@ -6,9 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 import com.goal.R;
 import com.goal.characters.Player;
@@ -35,6 +38,15 @@ public class Game extends SurfaceView{
 
     private boolean modifyPlayers = false;
     private boolean ballInPlay = false;
+
+    private float width;
+    private float height;
+
+    private float half;
+    private float fourth;
+    private float sixth;
+    private float eighth;
+    private float sixteenth;
 
     public Game(Context context) {
         super(context);
@@ -83,6 +95,22 @@ public class Game extends SurfaceView{
         goal = new Rect();
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        width = MeasureSpec.getSize(widthMeasureSpec);
+        height = MeasureSpec.getSize(heightMeasureSpec);
+
+        half = height/2;
+        fourth = height/4;
+        sixth = height/6;
+        eighth = height/8;
+        sixteenth = height/16;
+
+        goal.set((int) (width - eighth), (int) fourth, (int) width, (int) (height - fourth));
+    }
+
     private Sprite createSprite(int resouce) {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), resouce);
         return new Sprite(getWidth(), getHeight(), bmp);
@@ -93,23 +121,13 @@ public class Game extends SurfaceView{
         if(canvas != null){
             canvas.drawColor(Color.parseColor("#0E8C3A"));
 
-            float width = canvas.getWidth();
-            float height = canvas.getHeight();
-
-            float half = height/2;
-            float fourth = height/4;
-            float eighth = height/8;
-            float sixteenth = height/16;
-
-            goal = new Rect((int)(width-eighth), (int)fourth, (int)width, (int)(height-fourth));
-
             canvas.drawRect(0, 0, width, height, fieldPaint);
 
             canvas.drawRect(0, fourth, eighth, height-fourth, fieldPaint);
-            canvas.drawRect(0, eighth, fourth, height-eighth, fieldPaint);
+            canvas.drawRect(0, sixth, fourth, height - sixth, fieldPaint);
 
             canvas.drawRect(goal, fieldPaint);
-            canvas.drawRect(width-fourth, eighth, width, height-eighth, fieldPaint);
+            canvas.drawRect(width-fourth, sixth, width, height-sixth, fieldPaint);
 
             canvas.drawLine(width/2, 0, width/2, height, fieldPaint);
             canvas.drawCircle(width/2, height/2, height/8, fieldPaint);
