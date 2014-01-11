@@ -26,14 +26,6 @@ public class Player {
         canvas.drawCircle(x, y, radius, paint);
     }
 
-    public boolean checkCollision(Rect r){
-        return false;
-    }
-
-    public Rect getRect(){
-        return new Rect(x-25, y-25, x+25, y+25);
-    }
-
     public int getX(){
         return x;
     }
@@ -44,9 +36,5 @@ public class Player {
 
     public int getRadius(){
         return radius;
-    }
-
-    public int getMass(){
-        return radius * radius;
     }
 }

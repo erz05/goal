@@ -177,8 +177,6 @@ public class MainActivity extends Activity implements GameListener, MenuListener
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         game.createPlayer((int)e.getX(), (int)e.getY());
-        if(!paused)
-            game.robotJump();
         return false;
     }
 

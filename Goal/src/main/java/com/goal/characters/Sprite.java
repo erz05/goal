@@ -26,17 +26,10 @@ public class Sprite {
     private Paint paint;
     private Rect src;
     private Rect dst;
-
     private Random random;
+    private int speedX, speedY, radius = 25;
 
-    private int speedX, speedY, radius = 50;
-
-    //constant variables
-    private double gravity = 9.8;
-
-    private boolean goingup = false;
     private int groundLevel;
-
     private int row = 0;
 
     public Sprite(int w, int h, Bitmap bmp) {
@@ -76,26 +69,18 @@ public class Sprite {
 
         if(x<50){
             reset();
-            //speedX = -speedX;
-            //x = 50;
         }
 
         if(x>canvasW-50){
             reset();
-            //speedX = -speedX;
-            //x = canvasW-50;
         }
 
         if(y<50){
             reset();
-            //speedY = -speedY;
-            //y = 50;
         }
 
         if(y>canvasH-50){
             reset();
-            //speedY = -speedY;
-            //y = canvasH-50;
         }
 
         /*currentFrame = ++currentFrame % BMP_COLUMNS;
@@ -133,11 +118,6 @@ public class Sprite {
         return new Rect(x-25, y-25, x+25, y+25);
     }
 
-    public void jump(){
-        row = 1;
-        goingup = true;
-    }
-
     public int getX(){
         return x;
     }
@@ -158,37 +138,11 @@ public class Sprite {
         return radius;
     }
 
-    public void switchSpeed(){
-        int s = random.nextInt(2);
-        switch (s){
-            case 0:
-                speedY = speedY;
-                break;
-            case 1:
-                speedY = -speedY;
-                break;
-        }
-
-        s = random.nextInt(2);
-        switch (s){
-            case 0:
-                speedX = speedX;
-                break;
-            case 1:
-                speedX = -speedX;
-                break;
-        }
-    }
-
     public void reset(){
         x = 50;
         y = 50;
         speedX = 15;
         speedY = 15;
-    }
-
-    public double getDegrees(){
-        return Math.toDegrees(Math.atan(y/x));
     }
 
     public void setSpeedX(int speedX){
@@ -197,9 +151,5 @@ public class Sprite {
 
     public void setSpeedY(int speedY){
         this.speedY = speedY;
-    }
-
-    public int getMass(){
-        return radius * radius;
     }
 }
