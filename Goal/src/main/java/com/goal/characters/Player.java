@@ -10,7 +10,7 @@ import android.graphics.Rect;
 public class Player {
     private int x;
     private int y;
-    private int radius = 50;
+    private int radius = 25;
 
     public Player(int x, int y) {
         this.x = x;

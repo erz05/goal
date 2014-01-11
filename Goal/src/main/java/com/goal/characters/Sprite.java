@@ -67,36 +67,11 @@ public class Sprite {
         x += speedX;
         y += speedY;
 
-        if(x<50){
+        if(x<50 || x>canvasW-50 || y<50 || y>canvasH-50){
             reset();
         }
 
-        if(x>canvasW-50){
-            reset();
-        }
-
-        if(y<50){
-            reset();
-        }
-
-        if(y>canvasH-50){
-            reset();
-        }
-
-        /*currentFrame = ++currentFrame % BMP_COLUMNS;
-
-        if(goingup){
-            y -= 45;
-            if(y<height/2){
-                goingup = false;
-            }
-        }else {
-            y += 45;
-            if(y > groundLevel){
-                row = 0;
-                y = groundLevel;
-            }
-        }*/
+        //currentFrame = ++currentFrame % BMP_COLUMNS;
     }
 
     public void onDraw(Canvas canvas) {
