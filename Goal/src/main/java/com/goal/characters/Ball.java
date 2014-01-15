@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.goal.listeners.OnBallListener;
+
 import java.util.Random;
 
 /**
@@ -28,6 +30,7 @@ public class Ball {
     private Rect dst;
     private Random random;
     private int speedX, speedY, radius;
+    private OnBallListener listener;
 
     private int groundLevel;
     private int row = 0;
@@ -69,7 +72,8 @@ public class Ball {
         y += speedY;
 
         if(x<50 || x>canvasW-50 || y<50 || y>canvasH-50){
-            reset();
+            //reset();
+            listener.resetLevel();
         }
 
         //currentFrame = ++currentFrame % BMP_COLUMNS;
@@ -127,5 +131,9 @@ public class Ball {
 
     public void setSpeedY(int speedY){
         this.speedY = speedY;
+    }
+
+    public void setListener(OnBallListener listener){
+        this.listener = listener;
     }
 }

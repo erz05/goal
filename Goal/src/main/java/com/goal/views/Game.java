@@ -15,6 +15,7 @@ import com.goal.R;
 import com.goal.characters.*;
 import com.goal.characters.Character;
 import com.goal.listeners.GameListener;
+import com.goal.listeners.OnBallListener;
 import com.goal.util.GameLoopThread;
 
 import org.json.JSONArray;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Created by erz on 12/9/13.
  */
-public class Game extends SurfaceView{
+public class Game extends SurfaceView implements OnBallListener {
 
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
@@ -77,6 +78,7 @@ public class Game extends SurfaceView{
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 ball = createSprite(R.drawable.running);
+                setBallListener();
             }
 
             @Override
@@ -99,6 +101,12 @@ public class Game extends SurfaceView{
 
         goal = new Rect();
         stars = new ArrayList<Character>();
+    }
+
+    public void setBallListener(){
+        if(ball != null){
+            ball.setListener(this);
+        }
     }
 
     @Override
@@ -254,6 +262,7 @@ public class Game extends SurfaceView{
         ball.reset();
         if(modifyPlayers)
             players.clear();
+        setStars();
     }
 
     public void shootBall(){
@@ -262,6 +271,10 @@ public class Game extends SurfaceView{
 
     public void setJsonObject(JSONObject jsonObject){
         this.jsonObject = jsonObject;
+        setStars();
+    }
+
+    public void setStars(){
         JSONArray array = null;
         try {
             array = jsonObject.getJSONArray("stars");
