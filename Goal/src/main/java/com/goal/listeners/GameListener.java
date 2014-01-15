@@ -5,4 +5,5 @@ package com.goal.listeners;
  */
 public interface GameListener {
     public void setScore(int score);
+    public void levelComplete(int stars);
 }

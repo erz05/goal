@@ -7,16 +7,22 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.goal.R;
-import com.goal.characters.Player;
-import com.goal.characters.Sprite;
+import com.goal.characters.*;
+import com.goal.characters.Character;
 import com.goal.listeners.GameListener;
 import com.goal.util.GameLoopThread;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by erz on 12/9/13.
@@ -25,11 +31,13 @@ public class Game extends SurfaceView{
 
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
-    private Sprite ball;
+    private Ball ball;
     private Paint fieldPaint;
     private Paint playerPaint;
     private ArrayList<Player> players;
     private Rect goal;
+    private JSONObject jsonObject;
+    private ArrayList<com.goal.characters.Character> stars;
 
     private GameListener listener;
 
@@ -90,6 +98,7 @@ public class Game extends SurfaceView{
         players = new ArrayList<Player>();
 
         goal = new Rect();
+        stars = new ArrayList<Character>();
     }
 
     @Override
@@ -108,9 +117,9 @@ public class Game extends SurfaceView{
         goal.set((int) (width - eighth), (int) fourth, (int) width, (int) (height - fourth));
     }
 
-    private Sprite createSprite(int resouce) {
+    private Ball createSprite(int resouce) {
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), resouce);
-        return new Sprite(getWidth(), getHeight(), bmp);
+        return new Ball(getWidth(), getHeight(), getHeight()/16, bmp);
     }
 
     @Override
@@ -136,11 +145,19 @@ public class Game extends SurfaceView{
 
             if(ballInPlay && ball != null){
                 ball.onDraw(canvas);
-                //player.onDraw(canvas);
-
                 if(ball.getRect().intersect(goal)){
+                    listener.levelComplete(3);
                     listener.setScore(10);
                     ball.reset();
+                }
+            }
+
+            if(stars.size() > 0){
+                for(Character character: stars){
+                    character.onDraw(canvas);
+                    if(ball != null && ball.getRect().intersect(character.getRect())){
+                        character.setAlive(false);
+                    }
                 }
             }
 
@@ -173,19 +190,11 @@ public class Game extends SurfaceView{
                             ball.setSpeedX((int)(v1f*px+u1*qx));
                             ball.setSpeedY((int)(v1f*py+u1*qy));
                         }
-
-
-                        /*if(player.getRect().intersect(ball.getRect())){
-                            ball.switchSpeed();
-                        }*/
                     }
                 }
 
                 modifyPlayers = true;
             }
-            /*if(player.checkCollision(ball.getRect())){
-                //Log.v("DELETE_THIS", "Collision");
-            }*/
         }
     }
 
@@ -231,7 +240,7 @@ public class Game extends SurfaceView{
 
     public void createPlayer(int x, int y){
         if(modifyPlayers){
-            Player player = new Player(x, y);
+            Player player = new Player(x, y, getHeight()/16);
             players.add(player);
         }
     }
@@ -249,5 +258,38 @@ public class Game extends SurfaceView{
 
     public void shootBall(){
         ballInPlay = true;
+    }
+
+    public void setJsonObject(JSONObject jsonObject){
+        this.jsonObject = jsonObject;
+        JSONArray array = null;
+        try {
+            array = jsonObject.getJSONArray("stars");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(array != null){
+            for(int i=0; i<array.length(); i++){
+                JSONObject object = null;
+                try {
+                    object = array.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(object != null){
+                    try {
+                        Character character = new Character(object.getInt("x"), object.getInt("y"), 20, true);
+                        stars.add(character);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        Log.v("DELETE_THIS", "stars = "+stars.size());
+    }
+
+    public void drawStars(){
     }
 }

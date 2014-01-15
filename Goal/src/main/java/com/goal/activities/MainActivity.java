@@ -3,6 +3,7 @@ package com.goal.activities;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.goal.views.Game;
 import com.goal.views.Map;
 import com.goal.views.Menu;
 import com.goal.views.Pause;
+
+import org.json.JSONObject;
 
 public class MainActivity extends Activity implements GameListener, MenuListener, MapListener, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, OnPauseListener {
 
@@ -107,40 +110,47 @@ public class MainActivity extends Activity implements GameListener, MenuListener
         menuLayout.removeView(menu);
         menuLayout.addView(map);
         menu = null;
-        System.gc();
     }
 
     @Override
-    public void onLevelSelected() {
-        if(game != null){
-            FrameLayout gameLayout = (FrameLayout) findViewById(R.id.gameLayout);
-            gameLayout.addView(game);
-            //gameLayout.addView(background);
-            game.start();
-            paused = false;
+    public void onLevelSelected(JSONObject jsonObject) {
 
-            ImageView playLevel = (ImageView) findViewById(R.id.playLevel);
-            ImageView replayLevel = (ImageView) findViewById(R.id.replayLevel);
+        Log.v("DELETE_THIS", jsonObject.toString());
 
-            playLevel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    game.shootBall();
-                }
-            });
-
-            replayLevel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    game.resetLevel();
-                }
-            });
-
-            FrameLayout menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
-            menuLayout.removeView(map);
-            map = null;
-            System.gc();
+        if(game == null){
+            game = new Game(this);
+            game.setListener(this);
         }
+
+        game.setJsonObject(jsonObject);
+
+        FrameLayout gameLayout = (FrameLayout) findViewById(R.id.gameLayout);
+        gameLayout.addView(game);
+        //gameLayout.addView(background);
+        game.start();
+        paused = false;
+
+        ImageView playLevel = (ImageView) findViewById(R.id.playLevel);
+        ImageView replayLevel = (ImageView) findViewById(R.id.replayLevel);
+
+        playLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.shootBall();
+            }
+        });
+
+        replayLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.resetLevel();
+            }
+        });
+
+        FrameLayout menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
+        menuLayout.removeView(map);
+        map = null;
+        System.gc();
     }
 
     @Override
@@ -214,6 +224,25 @@ public class MainActivity extends Activity implements GameListener, MenuListener
             @Override
             public void run() {
                 score(score);
+            }
+        });
+    }
+
+    @Override
+    public void levelComplete(int stars) {
+        map = new Map(this);
+        map.setListener(this);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout menuLayout = (FrameLayout) findViewById(R.id.menuLayout);
+                menuLayout.addView(map);
+
+                FrameLayout gameLayout = (FrameLayout) findViewById(R.id.gameLayout);
+                gameLayout.removeView(game);
+                game = null;
+                paused = true;
             }
         });
     }

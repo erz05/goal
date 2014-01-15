@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * Created by erz on 12/10/13.
  */
-public class Sprite {
+public class Ball {
     private static final int BMP_ROWS = 2;
     private static final int BMP_COLUMNS = 4;
     private int x = 0;
@@ -27,12 +27,12 @@ public class Sprite {
     private Rect src;
     private Rect dst;
     private Random random;
-    private int speedX, speedY, radius = 25;
+    private int speedX, speedY, radius;
 
     private int groundLevel;
     private int row = 0;
 
-    public Sprite(int w, int h, Bitmap bmp) {
+    public Ball(int w, int h, int radius, Bitmap bmp) {
         this.width = bmp.getWidth() / BMP_COLUMNS;
         this.height = bmp.getHeight() / BMP_ROWS;
         this.bmp = bmp;
@@ -41,6 +41,7 @@ public class Sprite {
 
         x = 50;
         y = 50;
+        this.radius = radius;
 
         //x = w/3 - width/2;
         groundLevel = (3*h)/5;;
@@ -90,7 +91,7 @@ public class Sprite {
     }
 
     public Rect getRect(){
-        return new Rect(x-25, y-25, x+25, y+25);
+        return new Rect(x-radius, y-radius, x+radius, y+radius);
     }
 
     public int getX(){

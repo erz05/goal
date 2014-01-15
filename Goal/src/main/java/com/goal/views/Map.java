@@ -63,7 +63,7 @@ public class Map extends LinearLayout {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(listener != null){
-                        listener.onLevelSelected();
+                        listener.onLevelSelected((JSONObject)parent.getItemAtPosition(position));
                     }
                 }
             });
