@@ -166,11 +166,14 @@ public class MainActivity extends Activity implements GameListener, MenuListener
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
+        Log.v("DELETE_THIS", "double tap ");
+        game.modPlayers(false, (int)e.getX(), (int)e.getY());
         return false;
     }
 
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
+        Log.v("DELETE_THIS", "Double tap event");
         return false;
     }
 
@@ -186,7 +189,8 @@ public class MainActivity extends Activity implements GameListener, MenuListener
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        game.createPlayer((int)e.getX(), (int)e.getY());
+        Log.v("DELETE_THIS", "SINGLE tap");
+        game.modPlayers(true, (int)e.getX(), (int)e.getY());
         return false;
     }
 

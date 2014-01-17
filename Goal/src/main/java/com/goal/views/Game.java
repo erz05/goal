@@ -246,10 +246,36 @@ public class Game extends SurfaceView implements OnBallListener {
         }
     }
 
-    public void createPlayer(int x, int y){
+    public void modPlayers(boolean create, int x, int y){
         if(modifyPlayers){
-            Player player = new Player(x, y, getHeight()/16);
-            players.add(player);
+
+            if(create){
+                if(players.size() < 5){
+                    boolean goodPoint = true;
+                    for(Player player: players){
+                        if(player.getRect().contains(x, y))
+                            goodPoint = false;
+                    }
+                    if(goodPoint){
+                        Player player = new Player(x, y, getHeight()/16);
+                        players.add(player);
+                    }
+                }
+            }else {
+                if(players.size() > 0){
+                    int pos = -1;
+                    for(int i=0; i<players.size(); i++){
+
+                        Player player = players.get(i);
+                        if(player.getRect().contains(x,y)){
+                            pos = i;
+                        }
+                    }
+                    if(pos != -1){
+                        players.remove(pos);
+                    }
+                }
+            }
         }
     }
 
@@ -260,8 +286,8 @@ public class Game extends SurfaceView implements OnBallListener {
     public void resetLevel(){
         ballInPlay = false;
         ball.reset();
-        if(modifyPlayers)
-            players.clear();
+        //if(modifyPlayers)
+        //    players.clear();
         setStars();
     }
 

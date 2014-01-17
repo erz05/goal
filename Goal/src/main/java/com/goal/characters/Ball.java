@@ -71,10 +71,16 @@ public class Ball {
         x += speedX;
         y += speedY;
 
-        if(x<50 || x>canvasW-50 || y<50 || y>canvasH-50){
+
+        if(x<50 || x>canvasW-50)
+            speedX = -speedX;
+        if(y<50 || y>canvasH-50)
+            speedY = -speedY;
+
+        //if(x<50 || x>canvasW-50 || y<50 || y>canvasH-50){
             //reset();
-            listener.resetLevel();
-        }
+            //listener.resetLevel();
+        //}
 
         //currentFrame = ++currentFrame % BMP_COLUMNS;
     }

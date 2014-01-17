@@ -27,6 +27,10 @@ public class Player {
         canvas.drawCircle(x, y, radius, paint);
     }
 
+    public Rect getRect(){
+        return new Rect(x-radius, y-radius, x+radius, y+radius);
+    }
+
     public int getX(){
         return x;
     }
